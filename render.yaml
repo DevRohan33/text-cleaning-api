@@ -2,6 +2,6 @@ services:
   - type: web
     name: text-cleaner-api
     env: python
-    buildCommand: ""
+    buildCommand: "pip install -r requirements.txt"
     startCommand: gunicorn main:app
     autoDeploy: true
