@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: text-cleaner-api
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn main:app
+    autoDeploy: true
