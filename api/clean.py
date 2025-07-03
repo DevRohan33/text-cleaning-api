@@ -9,25 +9,23 @@ def clean_text(text):
     return " ".join(sentences)
 
 def handler(request):
-    if request.method != "POST":
-        return {
-            "statusCode": 405,
-            "body": "Only POST allowed"
-        }
-
     try:
-        body = request.body.decode()
+        # Decode and parse JSON body from request
+        body = request.body.decode("utf-8")
         data = json.loads(body)
-        text = data.get("text", "").strip()
 
+        # Check for 'text' key
+        text = data.get("text", "").strip()
         if not text:
             return {
                 "statusCode": 400,
-                "body": '{"error": "No text provided."}',
+                "body": json.dumps({"error": "No text provided."}),
                 "headers": {"Content-Type": "application/json"}
             }
 
+        # Clean the text
         cleaned = clean_text(text)
+
         return {
             "statusCode": 200,
             "body": json.dumps({"cleaned": cleaned}),
