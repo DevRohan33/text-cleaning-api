@@ -1,4 +1,5 @@
 import re
+import json
 
 def clean_text(text):
     text = re.sub(r"\s+", " ", text).strip()
@@ -15,7 +16,8 @@ def handler(request):
         }
 
     try:
-        data = request.json()
+        body = request.body.decode()
+        data = json.loads(body)
         text = data.get("text", "").strip()
 
         if not text:
@@ -28,13 +30,13 @@ def handler(request):
         cleaned = clean_text(text)
         return {
             "statusCode": 200,
-            "body": f'{{"cleaned": "{cleaned}"}}',
+            "body": json.dumps({"cleaned": cleaned}),
             "headers": {"Content-Type": "application/json"}
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
-            "body": f'{{"error": "{str(e)}"}}',
+            "body": json.dumps({"error": str(e)}),
             "headers": {"Content-Type": "application/json"}
         }
